@@ -1,4 +1,5 @@
-import { createClient } from '@/utils/supabase/server';
+import { db, responses } from '@/lib/db';
+import { eq } from 'drizzle-orm';
 import DirectoryContent from './DirectoryContent';
 import { Metadata } from 'next';
 
@@ -8,25 +9,18 @@ export const metadata: Metadata = {
 };
 
 export default async function DirectoryPage() {
-    const supabase = await createClient();
+    const data = await db.select().from(responses).where(eq(responses.approved, true));
 
-    const { data, count } = await supabase
-        .from('responses')
-        .select('*', { count: 'exact' })
-        .eq("approved", true);
-
-    const formattedData = data?.map((response) => ({
-        name: response.first_name + " " + (response.last_name ? response.last_name : ""),
-        role: response.role,
-        description: response.self_descriptions,
+    const formattedData = data.map((response) => ({
+        name: response.firstName + " " + (response.lastName || ""),
+        role: response.selfDescriptions?.[0] || '',
+        description: response.selfDescriptions,
         email: response.email,
-        linkedin: response.linkedin_url,
-        twitter: response.twitter_url,
-        website: response.website_url,
-        expertiseAreas: response.domains_of_interest?.split(",") || [],
-    })) || [];
+        linkedin: response.linkedinUrl,
+        twitter: response.xUrl,
+        website: response.startupWebsite,
+        expertiseAreas: response.domainsOfInterest?.split(",") || [],
+    }));
 
-    console.log(formattedData);
-
-    return <DirectoryContent initialMembers={formattedData} totalCount={count || 0} />;
+    return <DirectoryContent initialMembers={formattedData} totalCount={data.length} />;
 }
