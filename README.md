@@ -56,6 +56,20 @@ pnpm dev
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+## Deployment
+
+Deployed on **Coolify** (self-hosted PaaS on Hetzner):
+
+- **Live URL**: https://defense.agihouse.in
+- **Server**: Hetzner Cloud (5.223.44.108)
+- **Coolify Dashboard**: http://5.223.44.108:8000
+
+### Deploy
+```bash
+# Push to main triggers auto-deploy
+git push origin main
+```
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.

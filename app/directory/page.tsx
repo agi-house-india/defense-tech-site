@@ -1,3 +1,6 @@
+// Force dynamic rendering to avoid DB queries at build time
+export const dynamic = 'force-dynamic'
+
 import { db, responses } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 import DirectoryContent from './DirectoryContent';
